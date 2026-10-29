@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Playli — 나만의 음악 공간</title>
+<style>
+:root{--theme:#F9DADE;--theme-ink:#51465f;--ink:#34344b;--muted:#85849a;--line:#eceaf3;--accent:#9b8be2;--paper:#fff;--bg:#fbf9fc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif}
+button,input,textarea{font:inherit}button{cursor:pointer;border:0}button:focus-visible,input:focus-visible{outline:3px solid #a9cfff;outline-offset:2px}
+.app{max-width:1240px;margin:auto;padding:22px}.topbar{display:flex;align-items:center;gap:24px;padding:8px 0 22px}.logo{font-family:Georgia,serif;font-size:30px;font-style:italic;color:#8c7bd1;font-weight:bold;letter-spacing:-1.5px}.logo span{color:#f1a9b8}.nav{display:flex;gap:8px;flex:1}.nav button,.ghost{background:transparent;color:#6d6b85;padding:10px 13px;border-radius:20px}.nav button.active,.nav button:hover{background:#eeeafd;color:#7162b7}.searchtop{display:flex;background:#fff;border:1px solid var(--line);padding:8px 12px;border-radius:22px;width:240px}.searchtop input{border:0;outline:0;width:100%;min-width:0}.pill{border-radius:24px;padding:10px 16px;background:#9685df;color:#fff;font-weight:700}.pill.soft{background:#f1edff;color:#7566b5}.avatar{width:36px;height:36px;border-radius:50%;background:#ffe3e8;display:grid;place-items:center;font-size:19px}
+.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,.85fr);gap:18px}.panel{background:#fff;border:1px solid #f0edf5;border-radius:22px;padding:22px;box-shadow:0 6px 25px #54457a08}.hero{background:linear-gradient(120deg,#f9dade,#e9e7ff 60%,#dcecff);border-radius:20px;padding:30px;min-height:205px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative}.hero h1{font-size:clamp(25px,3vw,36px);line-height:1.25;margin:0 0 12px;letter-spacing:-1px}.hero p{color:#686785;line-height:1.7;margin:0 0 18px}.hero-art{font-size:100px;filter:drop-shadow(0 12px 12px #7d6f9a25);transform:rotate(-7deg);padding-right:18px}.section-head{display:flex;align-items:center;justify-content:space-between;margin:26px 0 14px}.section-head h2{font-size:18px;margin:0}.small{font-size:12px;color:var(--muted)}.playlist-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.playlist-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s;background:#fff}.playlist-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px #534b7812}.cover{height:130px;display:grid;place-items:center;font-size:46px;background:linear-gradient(135deg,var(--theme),#fff)}.cover img{width:100%;height:100%;object-fit:cover}.card-info{padding:12px}.card-info b{display:block;font-size:14px;margin-bottom:5px}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{padding:7px 11px;border-radius:16px;background:#f6f4fc;color:#77718f;font-size:12px}.chip:hover{background:var(--theme);color:#4d4763}.color-dots{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}.dot{width:25px;height:25px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #e5e2ec;cursor:pointer}.dot.selected{box-shadow:0 0 0 2px #7668b8}.side-title{font-size:17px;margin:0 0 14px}.field{display:flex;flex-direction:column;gap:7px;margin:13px 0}.field label{font-size:13px;font-weight:700;color:#66647e}.field input,.field textarea{border:1px solid #e6e3ef;border-radius:12px;padding:12px 13px;background:#fff;color:var(--ink);width:100%;outline:none}.field input:focus,.field textarea:focus{border-color:#a99be6}.field textarea{resize:vertical;min-height:70px}.row{display:flex;gap:9px}.row>*{min-width:0}.row input{flex:1}.hint{font-size:11px;color:#9995ab;line-height:1.5}.divider{height:1px;background:var(--line);margin:18px 0}.track-list{display:flex;flex-direction:column;gap:9px}.track{display:flex;align-items:center;gap:10px;padding:9px;border-radius:13px;background:#fbfaff}.track-icon{width:42px;height:42px;border-radius:10px;background:#e8e4fb;display:grid;place-items:center;flex-shrink:0}.track-meta{flex:1;min-width:0}.track-meta b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track-meta span{font-size:11px;color:var(--muted)}.icon-btn{width:34px;height:34px;border-radius:50%;background:#f0edfc;color:#7e70be}.empty{padding:20px;text-align:center;color:#9995ab;font-size:13px;background:#faf9fd;border-radius:14px}.bottom-player{position:sticky;bottom:12px;margin-top:18px;background:#fff;border:1px solid #e8e3f5;box-shadow:0 8px 28px #4e42631a;border-radius:18px;padding:12px 16px;display:flex;align-items:center;gap:14px;z-index:5}.player-thumb{width:46px;height:46px;border-radius:12px;background:var(--theme);display:grid;place-items:center}.player-info{flex:1;min-width:0}.player-info b{display:block;font-size:13px}.player-info span{font-size:11px;color:var(--muted)}.player-controls{display:flex;gap:8px;align-items:center}.player-controls button{background:#f1edff;color:#7566b5;border-radius:50%;width:34px;height:34px}.player-controls .play{background:#9886df;color:#fff;width:40px;height:40px}.mini-embed{width:180px;height:102px;border:0;border-radius:12px;background:#eee}.modal-backdrop{position:fixed;inset:0;background:#29253b66;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modal{width:min(430px,100%);background:#fff;border-radius:22px;padding:26px;box-shadow:0 20px 70px #1c173b35}.modal h2{margin:0 0 8px}.modal .field{margin:12px 0}.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#37334c;color:#fff;padding:12px 18px;border-radius:24px;font-size:13px;display:none;z-index:30}.footer{text-align:center;color:#a09bad;font-size:12px;padding:24px 0}.file-label{display:inline-flex;padding:9px 12px;border-radius:12px;background:#f2efff;color:#796ab7;font-size:12px;font-weight:700;cursor:pointer}
+.sticker-item{position:absolute;object-fit:contain;cursor:move;touch-action:none;user-select:none;max-width:none}
+.sticker-item.white-border{filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff)}
+.sticker-control{padding:10px;border:1px solid var(--line);border-radius:12px;background:#fcfbff}
+.sticker-control label{font-size:12px;color:#716b85}
+select{font:inherit}
+.hide{display:none!important}
+@media(max-width:850px){.app{padding:14px}.topbar{gap:10px;flex-wrap:wrap}.nav{order:3;flex-basis:100%;overflow:auto}.searchtop{flex:1;width:auto}.layout{grid-template-columns:1fr}.hero{padding:22px}.hero-art{font-size:75px}.playlist-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mini-embed{width:120px;height:68px}}
+@media(max-width:480px){.playlist-grid{grid-template-columns:1fr 1fr}.cover{height:100px}.hero-art{display:none}.panel{padding:16px}.bottom-player{gap:8px}.mini-embed{display:none}.searchtop{order:4;flex-basis:100%}.topbar .pill{padding:9px 12px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="logo">Playli<span>♥</span></div>
+  <nav class="nav"><button class="active" data-view="home">⌂ 홈</button><button data-view="discover">⌕ 탐색하기</button><button data-view="mine">▤ 내 플레이리스트</button><button data-view="mypage">♡ 마이페이지</button></nav>
+  <form class="searchtop" id="topSearch"><input id="topQuery" placeholder="음악, 아티스트 검색" aria-label="음악 검색"><button aria-label="검색" style="background:none">⌕</button></form>
+  <button class="ghost" id="loginOpen">로그인</button><button class="pill" id="signupOpen">가입하기</button><div class="avatar" id="avatar">🐻</div>
+</header>
+
+<main id="homeView">
+<div class="layout">
+<section>
+  <div class="hero">
+    <div><h1>좋아하는 음악을<br>더 가까이, 더 특별하게</h1><p>나만의 플레이리스트를 만들고<br>지금, 함께 공유해보세요.</p><button class="pill" id="heroCreate">플레이리스트 만들기 →</button></div>
+    <div class="hero-art" aria-label="하얀 토끼">🐰🎧</div>
+  </div>
+  <div class="section-head"><h2>🔥 지금 인기 있는 플레이리스트</h2><span class="small">오늘의 취향 모음</span></div>
+  <div class="playlist-grid" id="popularGrid"></div>
+</section>
+<aside class="panel">
+  <h2 class="side-title">🎨 오늘의 테마 컬러</h2><div class="color-dots" id="sideColors"></div>
+  <div class="divider"></div>
+  <h2 class="side-title">🎧 유튜브로 음악 찾기</h2>
+  <form id="ytSearch" class="row"><input id="ytQuery" placeholder="가수, 곡명, 장르 검색..." style="border:1px solid #e6e3ef;border-radius:12px;padding:11px;flex:1;width:0"><button class="pill">검색</button></form>
+  <p class="hint">검색하면 YouTube에서 관련 음악을 찾아볼 수 있어요.</p>
+  <div class="chips" style="margin-top:14px"><button class="chip genre" data-q="lofi chill">#lofi</button><button class="chip genre" data-q="kpop playlist">#kpop</button><button class="chip genre" data-q="인디 음악">#인디</button><button class="chip genre" data-q="재즈 플레이리스트">#재즈</button><button class="chip genre" data-q="발라드 모음">#발라드</button><button class="chip genre" data-q="EDM mix">#EDM</button></div>
+  <div class="divider"></div>
+  <h2 class="side-title">✨ 나만의 플레이리스트</h2><p class="small">좋아하는 노래를 모아 나만의 무드를 만들어보세요.</p><button class="pill" style="width:100%;margin-top:8px" id="sideCreate">＋ 새 플레이리스트</button>
+</aside>
+</div>
+</main>
+
+<main id="discoverView" class="hide">
+<div class="panel">
+  <div class="section-head" style="margin-top:0"><h2>🔎 유튜브 음악 탐색하기</h2><span class="small">원하는 음악을 검색해보세요</span></div>
+  <form id="discoverSearch" class="row"><input id="discoverQuery" placeholder="곡명, 아티스트, 장르 검색" style="flex:1;border:1px solid #e6e3ef;border-radius:14px;padding:14px"><button class="pill">YouTube에서 검색 ↗</button></form>
+  <div class="section-head"><h2>장르별로 둘러보기</h2></div>
+  <div class="chips"><button class="chip genre" data-q="K-pop new releases">🎤 K-pop</button><button class="chip genre" data-q="lofi hip hop radio">☁️ Lofi</button><button class="chip genre" data-q="indie music mix">🌿 인디</button><button class="chip genre" data-q="jazz cafe music">☕ 재즈</button><button class="chip genre" data-q="Korean ballad playlist">💗 발라드</button><button class="chip genre" data-q="EDM dance mix">⚡ EDM</button><button class="chip genre" data-q="classical piano playlist">🎹 클래식</button><button class="chip genre" data-q="R&B chill mix">🌙 R&B</button></div>
+  <div class="divider"></div><h2 class="side-title">추천 검색어</h2><div class="playlist-grid" id="searchIdeas"></div>
+</div>
+</main>
+
+<main id="mypageView" class="hide">
+<div class="panel" style="max-width:760px;margin:auto">
+  <div class="section-head" style="margin-top:0"><h2>♡ 마이페이지</h2><span class="small">나를 소개하는 작은 공간</span></div>
+  <div class="row" style="align-items:center;flex-wrap:wrap">
+    <div id="profilePreview" class="avatar" style="width:86px;height:86px;font-size:38px">🐰</div>
+    <div style="flex:1;min-width:180px"><label class="file-label" for="profileUpload">프로필 이미지 업로드</label><input class="hide" id="profileUpload" type="file" accept="image/*"><p class="hint">정사각형 이미지 권장 · 2.5MB 이하</p></div>
+  </div>
+  <div class="field"><label for="nicknameInput">닉네임</label><input id="nicknameInput" maxlength="24" placeholder="다른 사람에게 보여줄 닉네임"></div>
+  <button class="pill" id="saveProfile">프로필 저장하기 ♡</button>
+  <div class="divider"></div><h3 style="font-size:16px">내 플레이리스트</h3><p class="small">만든 플레이리스트를 관리하고 공개 범위를 설정할 수 있어요.</p><div id="profilePlaylistList" class="track-list"></div>
+</div></main>
+<main id="mineView" class="hide">
+<div class="panel"><div class="section-head" style="margin-top:0"><h2>💿 내 플레이리스트</h2><button class="pill" id="mineCreate">＋ 만들기</button></div><div class="playlist-grid" id="mineGrid"></div><div class="empty hide" id="mineEmpty">아직 만든 플레이리스트가 없어요. 첫 플레이리스트를 만들어볼까요? ✨</div></div>
+</main>
+
+<section class="panel hide" id="builder" style="margin-top:18px">
+<div class="section-head" style="margin-top:0"><h2>✦ 플레이리스트 만들기</h2><button class="ghost" id="closeBuilder">닫기 ✕</button></div>
+<div class="layout" style="grid-template-columns:minmax(0,1fr) minmax(260px,.8fr)">
+<div>
+  <div class="field"><label>메인 이미지</label><div id="coverPreview" class="cover" style="height:170px;border-radius:15px">🌷☁️</div><label class="file-label" for="coverUpload" style="margin-top:8px">이미지 업로드</label><input class="hide" type="file" id="coverUpload" accept="image/*"><span class="hint">JPG, PNG 등 이미지 파일을 선택하세요.</span></div>
+  <div class="field"><label for="playlistTitle">플레이리스트 제목</label><input id="playlistTitle" maxlength="50" placeholder="예: 햇살 가득한 오후"><span class="hint" id="titleCount">0 / 50</span></div>
+  <div class="field"><label for="playlistDesc">짧은 소개 (선택)</label><textarea id="playlistDesc" maxlength="160" placeholder="이 플레이리스트에 담긴 기분을 소개해주세요."></textarea></div>
+  <div class="field"><label>테마 컬러</label><div class="color-dots" id="builderColors"></div><div class="row" style="align-items:center"><label class="file-label" for="customColor">＋ 커스텀 컬러</label><input type="color" id="customColor" value="#F9DADE" style="width:55px;height:38px;border:0;background:transparent;padding:0"></div></div>
+  <div class="field"><label for="fontColor">플레이리스트 폰트 컬러</label><div class="row" style="align-items:center"><input type="color" id="fontColor" value="#51465F" style="width:56px;height:42px;padding:3px"><span class="hint">테마 배경에 어울리는 글자색을 직접 선택하세요.</span></div></div>
+  <div class="field"><label for="privacySelect">공개 범위</label><select id="privacySelect" style="border:1px solid #e6e3ef;border-radius:12px;padding:12px;background:#fff;color:var(--ink)"><option value="public">전체 공개</option><option value="private">비공개 (나만 보기)</option><option value="unlisted">링크 공유 한정 공개</option></select><span class="hint">프로토타입에서는 설정이 저장되며, 실제 접근 제한은 서버 연결이 필요합니다.</span></div>
+  <div class="field"><label for="playlistTags">태그 (최대 7개)</label><input id="playlistTags" maxlength="180" placeholder="예: lofi, 새벽감성, 카페 (쉼표로 구분)"><span class="hint" id="tagCount">0 / 7개</span></div>
+
+</div>
+<div>
+  <div class="field"><label>유튜브 링크 추가</label><div class="row"><input id="youtubeUrl" placeholder="https://youtu.be/... 또는 영상 URL"><button class="pill" id="addTrack" type="button">추가</button></div><span class="hint">YouTube 영상 링크를 붙여넣으면 제목을 가져오고 미니 플레이어로 감상할 수 있어요.</span></div>
+  <div id="builderTracks" class="track-list"><div class="empty">유튜브 링크를 추가하면 여기에 곡 목록이 표시돼요.</div></div>
+  
+  <div class="divider"></div>
+  <div class="field"><label>커스텀 스티커 (1~4개)</label><span class="hint">이미지를 업로드한 뒤 스티커를 드래그해 커버 위 원하는 곳에 놓으세요. 크기 조절과 흰색 테두리도 설정할 수 있어요.</span>
+  <label class="file-label" for="stickerUpload">＋ 스티커 이미지 추가</label><input class="hide" type="file" id="stickerUpload" accept="image/*" multiple>
+  <div id="stickerControls" class="track-list"></div></div>
+  <div id="stickerCanvas" style="position:relative;min-height:240px;border:1px dashed #d9d3e9;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,var(--theme),#fff);touch-action:pan-y">
+    <div id="stickerCanvasCover" style="position:absolute;inset:0;display:grid;place-items:center;font-size:34px;opacity:.25;pointer-events:none">✦ PLAYLI ✦</div>
+    <div id="stickerStage"></div>
+  </div>
+<div class="divider"></div><button class="pill" style="width:100%" id="savePlaylist">플레이리스트 저장하기 ♡</button>
+  <p class="hint" style="margin-top:10px">현재 데모는 이 브라우저에 저장됩니다. 계정 동기화와 서버 저장은 배포 시 연결이 필요해요.</p>
+</div>
+</div>
+</section>
+
+<section class="panel hide" id="detail" style="margin-top:18px">
+<div class="section-head" style="margin-top:0"><button class="ghost" id="backFromDetail">← 돌아가기</button><div class="row"><button class="pill soft" id="sharePlaylist">↗ 공유하기</button><button class="pill" id="editPlaylist">수정하기</button></div></div>
+<div class="row" style="align-items:center;flex-wrap:wrap">
+<div id="detailCover" class="cover" style="width:180px;height:180px;border-radius:18px;flex-shrink:0">🌷</div>
+<div style="flex:1"><h1 id="detailTitle" style="margin:0 0 8px">플레이리스트</h1><p id="detailDesc" class="small"></p><div class="chips" id="detailTags"></div></div>
+</div>
+<div class="section-head"><h2>트랙 목록</h2><span class="small" id="detailTrackCount"></span></div><div id="detailTracks" class="track-list"></div>
+</section>
+
+<div class="bottom-player" id="bottomPlayer">
+<div class="player-thumb">🎵</div><div class="player-info"><b id="nowTitle">Playli 미니 플레이어</b><span id="nowArtist">좋아하는 음악을 재생해보세요</span></div>
+<div class="player-controls"><button id="prevTrack" title="이전 곡">◀</button><button class="play" id="togglePlayer" title="재생/일시정지">▶</button><button id="nextTrack" title="다음 곡">▶</button></div>
+<iframe class="mini-embed hide" id="miniEmbed" title="YouTube 미니 플레이어" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+</div>
+<div class="footer">made with ♡ and your favorite songs · Playli</div>
+</div>
+
+<div class="modal-backdrop" id="authBackdrop"><div class="modal">
+<button id="authClose" class="ghost" style="float:right">✕</button><div class="logo" style="margin-bottom:16px">Playli<span>♥</span></div><h2 id="authTitle">다시 만나서 반가워요!</h2><p class="small" id="authSubtitle">로그인하고 나만의 음악을 모아보세요.</p>
+<form id="authForm"><div class="field"><label>아이디</label><input id="authId" required minlength="3" maxlength="24" autocomplete="username" placeholder="아이디 (3자 이상)"></div><div class="field"><label>비밀번호</label><input id="authPassword" required minlength="4" type="password" autocomplete="current-password" placeholder="비밀번호 (4자 이상)"></div><div class="field hide" id="confirmField"><label>비밀번호 확인</label><input id="authConfirm" type="password" minlength="4" placeholder="비밀번호를 한 번 더 입력"></div><button class="pill" style="width:100%" id="authSubmit">로그인</button></form>
+<div class="divider"></div><p class="small" id="authSwitchText">처음 오셨나요? <button class="ghost" id="switchAuth" style="padding:2px;color:#8474ca">회원가입</button></p><p class="hint">데모 로그인은 이 브라우저에서만 작동합니다. 실제 서비스에서는 서버 기반 인증이 필요합니다.</p>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+const PRESETS=[
+ {name:'코랄 핑크',hex:'#F9DADE',emoji:'🌸'},
+ {name:'라벤더',hex:'#C0B9DD',emoji:'☁️'},
+ {name:'스카이 블루',hex:'#ABD2FA',emoji:'🫧'},
+ {name:'크림 옐로우',hex:'#FFF7CC',emoji:'☀️'},
+ {name:'크림 그린',hex:'#A8C9A0',emoji:'🌿'},
+ {name:'우드 브라운',hex:'#917E76',emoji:'☕'}
+];
+let selectedColor=PRESETS[0].hex, coverData='', tracks=[], playlists=[], currentPlaylistId=null, playingTrack=null, authMode='login', user=null, playerPlaying=false, stickerDraft=[] , profileImage='', profileNickname='';
+const $=id=>document.getElementById(id);
+function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2600)}
+function setTheme(hex){selectedColor=hex;document.documentElement.style.setProperty('--theme',hex);
+const customInk=$('fontColor')?.value;document.documentElement.style.setProperty('--theme-ink',customInk||'#51465f');document.querySelectorAll('.dot').forEach(d=>d.classList.toggle('selected',d.dataset.color.toLowerCase()===hex.toLowerCase()));$('customColor').value=hex}
+function addColorDots(target){const el=$(target);el.innerHTML='';PRESETS.forEach(p=>{const b=document.createElement('button');b.className='dot';b.style.background=p.hex;b.dataset.color=p.hex;b.title=p.name;b.setAttribute('aria-label',p.name);b.onclick=()=>setTheme(p.hex);el.appendChild(b)})}
+['sideColors','builderColors'].forEach(addColorDots);
+const demoPlaylists=[
+{id:'demo1',title:'햇살 가득한 오후',desc:'따스한 햇살과 함께 듣고 싶은 기분 좋은 음악들 🌼',color:'#ABD2FA',emoji:'🌼',author:'sunshines',tracks:[],demo:true},
+{id:'demo2',title:'카페에서 듣는 재즈',desc:'커피 한 잔과 여유로운 오후',color:'#F9DADE',emoji:'☕',author:'latte',tracks:[],demo:true},
+{id:'demo3',title:'여름 바다의 기억',desc:'파도 소리처럼 청량한 플레이리스트',color:'#ABD2FA',emoji:'🌊',author:'wave',tracks:[],demo:true},
+{id:'demo4',title:'감성 밤 드라이브',desc:'도시의 불빛 아래 달리는 밤',color:'#C0B9DD',emoji:'🌆',author:'mellow',tracks:[],demo:true},
+{id:'demo5',title:'밤에 듣는 chill 음악',desc:'오늘 하루를 부드럽게 마무리하기',color:'#917E76',emoji:'🌙',author:'moonlight',tracks:[],demo:true},
+{id:'demo6',title:'작은 방, 큰 꿈',desc:'집중하고 싶은 날의 잔잔한 음악',color:'#A8C9A0',emoji:'🪴',author:'littlecloud',tracks:[],demo:true}
+];
+function load(){try{playlists=JSON.parse(localStorage.getItem('playli_playlists')||'[]')}catch{playlists=[]}try{user=JSON.parse(sessionStorage.getItem('playli_user')||'null')}catch{user=null}try{const prof=JSON.parse(localStorage.getItem('playli_profile_'+(user?.id||'guest'))||'{}');profileImage=prof.image||'';profileNickname=prof.nickname||''}catch{profileImage='';profileNickname=''}updateAuthUI();renderCards()}
+function persist(){localStorage.setItem('playli_playlists',JSON.stringify(playlists))}
+function coverMarkup(p){return p.cover?`<img src="${p.cover}" alt="">`:(p.emoji||'🎧')}
+function renderCards(){const all=[...demoPlaylists,...playlists];$('popularGrid').innerHTML=all.slice(0,6).map(p=>`<article class="playlist-card" data-id="${p.id}"><div class="cover" style="background:linear-gradient(135deg,${p.color||'#F9DADE'},#fff)">${coverMarkup(p)}</div><div class="card-info"><b>${escapeHTML(p.title)}</b><span class="small">by ${escapeHTML(p.author||'you')} · ♡ ${p.tracks?.length||0}</span></div></article>`).join('');$('mineGrid').innerHTML=playlists.map(p=>`<article class="playlist-card" data-id="${p.id}"><div class="cover" style="background:linear-gradient(135deg,${p.color},#fff)">${coverMarkup(p)}</div><div class="card-info"><b>${escapeHTML(p.title)}</b><span class="small">${p.tracks.length}곡 · ${escapeHTML(p.desc||'나만의 음악 모음')}</span></div></article>`).join('');$('mineEmpty').classList.toggle('hide',playlists.length>0);document.querySelectorAll('.playlist-card').forEach(c=>c.onclick=()=>openDetail(c.dataset.id))}
+function escapeHTML(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function switchView(view){['home','discover','mine','mypage'].forEach(v=>$(v+'View').classList.toggle('hide',v!==view));
+if(view==='mypage')renderMyPage();document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));$('builder').classList.add('hide');$('detail').classList.add('hide');window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+function openBuilder(p=null){if(!user){openAuth('login');toast('저장하려면 먼저 로그인해주세요.');return}currentPlaylistId=p?.id||null;tracks=p?[...(p.tracks||[])]:[];coverData=p?.cover||'';selectedColor=p?.color||PRESETS[0].hex;$('playlistTitle').value=p?.title||'';$('playlistDesc').value=p?.desc||'';$('titleCount').textContent=$('playlistTitle').value.length+' / 50';
+$('coverPreview').innerHTML=coverData?`<img src="${coverData}" alt="커버 미리보기">`:'🌷☁️';
+$('fontColor').value=p?.fontColor||'#51465F';$('privacySelect').value=p?.privacy||'public';$('playlistTags').value=(p?.tags||[]).join(', ');$('tagCount').textContent=(p?.tags||[]).length+' / 7개';
+stickerDraft=(p?.stickers||[]).map(s=>({...s}));setTheme(selectedColor);renderStickers();renderBuilderTracks();$('detail').classList.add('hide');$('builder').classList.remove('hide');$('builder').scrollIntoView({behavior:'smooth',block:'start'})}
+function renderBuilderTracks(){const el=$('builderTracks');if(!tracks.length){el.innerHTML='<div class="empty">유튜브 링크를 추가하면 여기에 곡 목록이 표시돼요.</div>';return}el.innerHTML=tracks.map((t,i)=>`<div class="track"><div class="track-icon">♫</div><div class="track-meta"><b>${escapeHTML(t.title)}</b><span>${escapeHTML(t.artist||'YouTube 영상')}</span></div><button class="icon-btn" data-play="${i}" title="재생">▶</button><button class="icon-btn" data-remove="${i}" title="삭제">×</button></div>`).join('');el.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>playTrack(tracks[+b.dataset.play]));el.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{tracks.splice(+b.dataset.remove,1);renderBuilderTracks()})}
+$('heroCreate').onclick=$('sideCreate').onclick=$('mineCreate').onclick=()=>openBuilder();
+$('closeBuilder').onclick=()=>$('builder').classList.add('hide');
+$('playlistTitle').oninput=()=> $('titleCount').textContent=$('playlistTitle').value.length+' / 50';
+$('playlistTags').oninput=()=>{const n=$('playlistTags').value.split(',').map(t=>t.trim()).filter(Boolean).length;$('tagCount').textContent=Math.min(n,7)+' / 7개';};
+$('fontColor').oninput=e=>document.documentElement.style.setProperty('--theme-ink',e.target.value);
+$('coverUpload').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>2.5*1024*1024){toast('이미지는 2.5MB 이하로 선택해주세요.');return}const r=new FileReader();r.onload=()=>{coverData=r.result;$('coverPreview').innerHTML=`<img src="${coverData}" alt="커버 미리보기">`};r.readAsDataURL(f)};
+$('customColor').oninput=e=>setTheme(e.target.value);
+function getVideoId(url){try{const u=new URL(url);if(u.hostname.includes('youtu.be'))return u.pathname.slice(1).split('/')[0];if(u.hostname.includes('youtube.com')||u.hostname.includes('youtube-nocookie.com')){if(u.pathname==='/watch')return u.searchParams.get('v');const m=u.pathname.match(/\/(embed|shorts|live)\/([^/?]+)/);return m?m[2]:null}}catch{}return null}
+async function addYoutube(){const url=$('youtubeUrl').value.trim(),id=getVideoId(url);if(!id){toast('올바른 YouTube 영상 링크를 입력해주세요.');return}if(tracks.some(t=>t.videoId===id)){toast('이미 추가된 영상이에요.');return}let title='YouTube 음악 영상',artist='YouTube';try{const res=await fetch('https://www.youtube.com/oembed?url='+encodeURIComponent('https://www.youtube.com/watch?v='+id)+'&format=json');if(res.ok){const d=await res.json();title=d.title||title;artist=d.author_name||artist}}catch{}tracks.push({videoId:id,url:'https://www.youtube.com/watch?v='+id,title,artist});$('youtubeUrl').value='';renderBuilderTracks();toast('플레이리스트에 추가했어요 ♡')}
+$('addTrack').onclick=addYoutube;$('youtubeUrl').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addYoutube()}});
+$('savePlaylist').onclick=()=>{const title=$('playlistTitle').value.trim();if($('playlistTags').value.split(',').map(t=>t.trim()).filter(Boolean).length>7){toast('태그는 최대 7개까지 입력할 수 있어요.');return}if(stickerDraft.length>4){toast('스티커는 최대 4개까지 추가할 수 있어요.');return}if(!title){toast('플레이리스트 제목을 입력해주세요.');$('playlistTitle').focus();return}if(!user){openAuth('login');return}const id=currentPlaylistId||('pl_'+Date.now());const p={id,title,desc:$('playlistDesc').value.trim(),color:selectedColor,fontColor:$('fontColor').value||'#51465F',privacy:$('privacySelect').value,tags:$('playlistTags').value.split(',').map(t=>t.trim()).filter(Boolean).slice(0,7),stickers:stickerDraft.map(s=>({...s})),cover:coverData,emoji:PRESETS.find(x=>x.hex.toLowerCase()===selectedColor.toLowerCase())?.emoji||'🎧',author:user.id,tracks:[...tracks],updatedAt:Date.now()};const i=playlists.findIndex(x=>x.id===id);if(i>=0)playlists[i]=p;else playlists.unshift(p);persist();renderCards();$('builder').classList.add('hide');toast('플레이리스트를 저장했어요! ♡');openDetail(id)};
+function openDetail(id){const p=[...playlists,...demoPlaylists].find(x=>x.id===id);if(!p)return;currentPlaylistId=p.id;setTheme(p.color||PRESETS[0].hex);$('builder').classList.add('hide');$('detail').classList.remove('hide');$('detailTitle').textContent=p.title;$('detailTitle').style.color=p.fontColor||'#51465F';$('detailDesc').textContent=p.desc||'내 취향을 담은 플레이리스트';$('detailDesc').style.color=p.fontColor||'#51465F';$('detailCover').style.background=`linear-gradient(135deg,${p.color||'#F9DADE'},#fff)`;$('detailCover').innerHTML=coverMarkup(p);$('detailTrackCount').textContent=(p.tracks?.length||0)+'곡';$('detailTags').innerHTML=`<span class="chip">${p.tracks?.length||0} tracks</span><span class="chip">${({public:'전체 공개',private:'비공개',unlisted:'링크 공유 한정'})[p.privacy||'public']}</span>${(p.tags||[]).map(t=>`<span class="chip">#${escapeHTML(t)}</span>`).join('')}<span class="chip">by ${escapeHTML(p.author||'Playli')}</span>`;
+const stickerLayer=document.createElement('div');stickerLayer.style.cssText='position:absolute;inset:0;pointer-events:none';
+$('detailCover').style.position='relative';$('detailCover').appendChild(stickerLayer);
+(p.stickers||[]).forEach(s=>{const im=document.createElement('img');im.src=s.src;im.alt='커스텀 스티커';im.style.cssText=`position:absolute;left:${s.x}%;top:${s.y}%;width:${s.size}px;height:${s.size}px;object-fit:contain;${s.border?'filter:drop-shadow(0 0 2px white) drop-shadow(0 0 2px white) drop-shadow(0 0 2px white)':''}`;stickerLayer.appendChild(im)});const el=$('detailTracks');el.innerHTML=p.tracks?.length?p.tracks.map((t,i)=>`<div class="track"><div class="track-icon">♫</div><div class="track-meta"><b>${escapeHTML(t.title)}</b><span>${escapeHTML(t.artist||'YouTube')}</span></div><button class="icon-btn" data-play="${i}">▶</button></div>`).join(''):'<div class="empty">아직 곡이 없어요. 수정하기를 눌러 YouTube 링크를 추가해보세요 🎵</div>';el.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>playTrack(p.tracks[+b.dataset.play]));$('editPlaylist').style.display=p.demo?'none':'inline-block';$('detail').scrollIntoView({behavior:'smooth',block:'start'})}
+$('backFromDetail').onclick=()=>{$('detail').classList.add('hide');switchView('mine')};
+$('editPlaylist').onclick=()=>{const p=playlists.find(x=>x.id===currentPlaylistId);if(p)openBuilder(p)};
+$('sharePlaylist').onclick=async()=>{const p=[...playlists,...demoPlaylists].find(x=>x.id===currentPlaylistId);if(!p)return;const shareText=`${p.title} ♡ — ${p.desc||'Playli에서 만든 플레이리스트'}\n${p.tracks?.map(t=>t.url).join('\n')||''}`;try{if(navigator.share)await navigator.share({title:p.title,text:shareText});else if(navigator.clipboard){await navigator.clipboard.writeText(shareText);toast('플레이리스트 소개와 링크를 복사했어요!')}else prompt('복사해서 공유하세요',shareText)}catch(e){if(e.name!=='AbortError')toast('공유를 완료하지 못했어요.')}}; 
+function playTrack(t){playingTrack=t;playerPlaying=true;$('nowTitle').textContent=t.title;$('nowArtist').textContent=t.artist||'YouTube';$('togglePlayer').textContent='Ⅱ';const iframe=$('miniEmbed');iframe.classList.remove('hide');iframe.src='https://www.youtube-nocookie.com/embed/'+t.videoId+'?autoplay=1&playsinline=1&rel=0';$('bottomPlayer').scrollIntoView({behavior:'smooth',block:'nearest'})}
+$('togglePlayer').onclick=()=>{if(!playingTrack){toast('먼저 플레이리스트에서 곡을 선택해주세요.');return}if(playerPlaying){$('miniEmbed').src='';$('miniEmbed').classList.add('hide');$('togglePlayer').textContent='▶';playerPlaying=false}else playTrack(playingTrack)};
+function stepTrack(direction){if(!playingTrack){toast('먼저 재생할 곡을 선택해주세요.');return}const owner=playlists.find(p=>p.tracks?.some(t=>t.videoId===playingTrack.videoId));const list=owner?.tracks?.length?owner.tracks:tracks;if(!list.length){toast('이 플레이리스트에 곡이 없어요.');return}let i=list.findIndex(t=>t.videoId===playingTrack.videoId);i=(i+direction+list.length)%list.length;playTrack(list[i])}
+$('prevTrack').onclick=()=>stepTrack(-1);$('nextTrack').onclick=()=>stepTrack(1);
+function doYoutubeSearch(q){if(!q.trim())return;window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q.trim()),'_blank','noopener,noreferrer')}
+$('ytSearch').onsubmit=e=>{e.preventDefault();doYoutubeSearch($('ytQuery').value)};
+$('topSearch').onsubmit=e=>{e.preventDefault();const q=$('topQuery').value;switchView('discover');$('discoverQuery').value=q;doYoutubeSearch(q)};
+$('discoverSearch').onsubmit=e=>{e.preventDefault();doYoutubeSearch($('discoverQuery').value)};
+document.querySelectorAll('.genre').forEach(b=>b.onclick=()=>{switchView('discover');$('discoverQuery').value=b.dataset.q;doYoutubeSearch(b.dataset.q)});
+$('searchIdeas').innerHTML=[['햇살 좋은 날의 인디','indie music sunny day','🌼'],['새벽 감성 lofi','lofi chill beats','🌙'],['기분 전환 K-pop','K-pop upbeat playlist','🎤']].map(x=>`<article class="playlist-card idea" data-q="${x[1]}"><div class="cover" style="background:linear-gradient(135deg,#F9DADE,#ABD2FA)">${x[2]}</div><div class="card-info"><b>${x[0]}</b><span class="small">YouTube에서 탐색 ↗</span></div></article>`).join('');document.querySelectorAll('.idea').forEach(c=>c.onclick=()=>doYoutubeSearch(c.dataset.q));
+function openAuth(mode){authMode=mode;$('authBackdrop').style.display='flex';const signup=mode==='signup';$('authTitle').textContent=signup?'Playli에 가입하기 ♡':'다시 만나서 반가워요!';$('authSubtitle').textContent=signup?'아이디와 비밀번호로 간단하게 시작해요.':'로그인하고 나만의 음악을 모아보세요.';$('authSubmit').textContent=signup?'회원가입':'로그인';$('confirmField').classList.toggle('hide',!signup);$('authSwitchText').innerHTML=signup?'이미 계정이 있나요? <button class="ghost" id="switchAuth" style="padding:2px;color:#8474ca">로그인</button>':'처음 오셨나요? <button class="ghost" id="switchAuth" style="padding:2px;color:#8474ca">회원가입</button>'; $('switchAuth').onclick=()=>openAuth(signup?'login':'signup');$('authPassword').value='';$('authConfirm').value=''}
+$('loginOpen').onclick=()=>openAuth('login');$('signupOpen').onclick=()=>openAuth('signup');$('authClose').onclick=()=>$('authBackdrop').style.display='none';$('authBackdrop').onclick=e=>{if(e.target===$('authBackdrop'))$('authBackdrop').style.display='none'};
+function updateAuthUI(){$('loginOpen').textContent=user?'로그아웃':'로그인';$('signupOpen').classList.toggle('hide',!!user);$('avatar').textContent=user?'🎧':'🐻';if(user)$('loginOpen').onclick=()=>{user=null;sessionStorage.removeItem('playli_user');updateAuthUI();toast('로그아웃했어요.')};else $('loginOpen').onclick=()=>openAuth('login')}
+$('authForm').onsubmit=e=>{e.preventDefault();const id=$('authId').value.trim(),pw=$('authPassword').value;let accounts={};try{accounts=JSON.parse(localStorage.getItem('playli_demo_accounts')||'{}')}catch{}if(authMode==='signup'){if(pw!==$('authConfirm').value){toast('비밀번호가 일치하지 않아요.');return}if(accounts[id]){toast('이미 사용 중인 아이디예요.');return}accounts[id]=pw;localStorage.setItem('playli_demo_accounts',JSON.stringify(accounts));toast('가입 완료! 로그인해주세요.');openAuth('login');$('authId').value=id;return}else{if(accounts[id]!==pw){toast('아이디 또는 비밀번호를 확인해주세요.');return}user={id};sessionStorage.setItem('playli_user',JSON.stringify(user));$('authBackdrop').style.display='none';updateAuthUI();toast(id+'님, 환영해요! ♡');}};
+
+function renderMyPage(){
+ if(!user){$('profilePlaylistList').innerHTML='<div class="empty">프로필을 관리하려면 로그인해주세요.</div>';return}
+ let prof={};try{prof=JSON.parse(localStorage.getItem('playli_profile_'+user.id)||'{}')}catch{}
+ profileImage=prof.image||profileImage||'';profileNickname=prof.nickname||profileNickname||user.id;
+ $('profilePreview').innerHTML=profileImage?`<img src="${profileImage}" alt="프로필" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:'🐰';
+ $('nicknameInput').value=profileNickname;
+ const mine=playlists.filter(p=>p.author===user.id);
+ $('profilePlaylistList').innerHTML=mine.length?mine.map(p=>`<div class="track"><div class="track-icon">♫</div><div class="track-meta"><b>${escapeHTML(p.title)}</b><span>${({public:'전체 공개',private:'비공개',unlisted:'링크 공유 한정'})[p.privacy||'public']}</span></div><button class="icon-btn" data-manage="${p.id}">편집</button></div>`).join(''):'<div class="empty">아직 만든 플레이리스트가 없어요.</div>';
+ $('profilePlaylistList').querySelectorAll('[data-manage]').forEach(b=>b.onclick=()=>openBuilder(playlists.find(p=>p.id===b.dataset.manage)));
+}
+$('profileUpload').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>2.5*1024*1024){toast('이미지는 2.5MB 이하로 선택해주세요.');return}const r=new FileReader();r.onload=()=>{profileImage=r.result;$('profilePreview').innerHTML=`<img src="${profileImage}" alt="프로필" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`};r.readAsDataURL(f)};
+$('saveProfile').onclick=()=>{if(!user){toast('먼저 로그인해주세요.');return}profileNickname=$('nicknameInput').value.trim()||user.id;localStorage.setItem('playli_profile_'+user.id,JSON.stringify({image:profileImage,nickname:profileNickname}));toast('프로필을 저장했어요 ♡');renderMyPage()};
+$('stickerUpload').onchange=e=>{const files=[...e.target.files];if(stickerDraft.length+files.length>4){toast('스티커는 최대 4개까지 추가할 수 있어요.');e.target.value='';return}
+ files.forEach(file=>{if(!file.type.startsWith('image/'))return;if(file.size>1.5*1024*1024){toast('스티커 이미지는 각각 1.5MB 이하로 선택해주세요.');return}const reader=new FileReader();reader.onload=()=>{stickerDraft.push({src:reader.result,x:8+stickerDraft.length*18,y:8,size:70,border:true});renderStickers()};reader.readAsDataURL(file)});e.target.value=''};
+function renderStickers(){
+ const stage=$('stickerStage'),controls=$('stickerControls');if(!stage||!controls)return;stage.innerHTML='';controls.innerHTML='';
+ stickerDraft.forEach((s,i)=>{
+ const img=document.createElement('img');img.src=s.src;img.className='sticker-item'+(s.border?' white-border':'');img.style.left=s.x+'%';img.style.top=s.y+'%';img.style.width=s.size+'px';img.style.height=s.size+'px';img.draggable=false;img.alt='스티커 '+(i+1);stage.appendChild(img);
+ let startX=0,startY=0,origX=0,origY=0;
+ img.addEventListener('pointerdown',e=>{e.preventDefault();img.setPointerCapture(e.pointerId);startX=e.clientX;startY=e.clientY;origX=s.x;origY=s.y});
+ img.addEventListener('pointermove',e=>{if(!img.hasPointerCapture(e.pointerId))return;const r=$('stickerCanvas').getBoundingClientRect();s.x=Math.max(0,Math.min(90,origX+(e.clientX-startX)/r.width*100));s.y=Math.max(0,Math.min(80,origY+(e.clientY-startY)/r.height*100));img.style.left=s.x+'%';img.style.top=s.y+'%'});
+ const box=document.createElement('div');box.className='sticker-control';
+ box.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="font-size:12px">스티커 ${i+1}</b><button type="button" class="ghost" data-del="${i}" style="padding:3px">삭제 ×</button></div><label>크기 <input data-size="${i}" type="range" min="32" max="140" value="${s.size}" style="width:100%"></label><label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input data-border="${i}" type="checkbox" ${s.border?'checked':''} style="width:auto"> 흰색 테두리 추가</label>`;
+ controls.appendChild(box);
+ });
+ controls.querySelectorAll('[data-size]').forEach(el=>el.oninput=()=>{const s=stickerDraft[+el.dataset.size];s.size=+el.value;const im=stage.children[+el.dataset.size];im.style.width=s.size+'px';im.style.height=s.size+'px'});
+ controls.querySelectorAll('[data-border]').forEach(el=>el.onchange=()=>{stickerDraft[+el.dataset.border].border=el.checked;stage.children[+el.dataset.border].classList.toggle('white-border',el.checked)});
+ controls.querySelectorAll('[data-del]').forEach(el=>el.onclick=()=>{stickerDraft.splice(+el.dataset.del,1);renderStickers()});
+}
+
+load();setTheme(PRESETS[0].hex);
+</script>
+</body>
+</html>
